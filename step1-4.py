@@ -7,37 +7,35 @@ genome_list = []
 
 # Opens the file that has the test cases in it.
 # Reads in each genome into its own list, per line
-with open('gene.fna') as f:
+with open('test.fna') as f:
     line = f.readline()
-    all_genomes = []
+    all_genome = ""
     while line:
-        if("<" not in line):
-            all_genomes.append(line)
-            line = f.readline().rstrip("\n")
+        if line.find(">") != -1:
+            genome_list.append(all_genome)
+            all_genome = ""
+            line = f.readline()
         else:
             line = f.readline().rstrip("\n")
+            all_genome += line
+    genome_list.append(all_genome)
+genome_list = [x for x in genome_list if x]
 
-print(len(all_genomes))
 # Now gpo through each list genome 
 # and run algorthim to pick out sequnces of 20 nucleotides preceding a PAM.
 all_genomes_RGNA = []
-for a_genome in all_genomes:
-    # print(len(a_genome))
+for a_genome in genome_list:
     all_GRNA_sequnces_current = []
-    current_genome = ''.join(a_genome)
-    # print(len(current_genome))
-    # print(type(current_genome))
     find_index = 0
     while find_index is not -1:
-        find_index = current_genome.find("NGG")
-        # print(find_index)
+        find_index = a_genome.find("NGG")
+        print(find_index)
         if (find_index > 20):
-            all_GRNA_sequnces_current.append(current_genome[find_index-20:find_index])
-            current_genomoe = current_genome[find_index+3:]
-            # print(len(current_genome))
-    #     else:
-    #         # print("need to fix")
-    # print("moving on")
+            all_GRNA_sequnces_current.append(a_genome[find_index-20:find_index])
+            a_genome = a_genome[find_index+3:]
+            print(a_genome)
+            print(find_index)
+    all_genomes_RGNA.append(all_GRNA_sequnces_current)
 
 print(all_genomes_RGNA)
                         
