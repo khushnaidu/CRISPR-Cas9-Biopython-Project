@@ -36,10 +36,13 @@ for a_genome in genome_list:
     all_GRNA_sequnces_current = []
     find_index = 0
     while find_index != -1:
-        find_index = a_genome.find("NGG")
+        find_index = a_genome.find("GG")
+        print(find_index)
         if (find_index > 20):
-            all_GRNA_sequnces_current.append(a_genome[find_index-20:find_index])
-            a_genome = a_genome[find_index+3:]
+            all_GRNA_sequnces_current.append(a_genome[find_index-21:find_index-1])
+            a_genome = a_genome[find_index+2:]
+        else:
+            a_genome = a_genome[find_index+2:]
     all_genomes_RGNA.append(all_GRNA_sequnces_current)
 
 # Convert to complement
