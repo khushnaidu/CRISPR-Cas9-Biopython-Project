@@ -1,0 +1,31 @@
+The metrics list we used to make this score were: 
+
+-The counting of the Ts and Cs adjacent to the PAM site(Because the nucleotides adjacent to the PAM site contain significantly lower counts of Cs and Ts
+-A measure of higher GC content in the whole sequence(Functional gRNAs show lower counts of GC content
+
+Low Goodness Score = Good Quality gRNA
+
+---------------------------------------------------------------------
+
+      SEQUENCE      	 	GOODNESS SCORE 
+
+AAUCCUCGAACUCGGGUCUGC	 	 	  22
+CUCGGGUCUGCCGGGAUCGUC	 	 	  28
+UCGGGUCUGCCGGGAUCGUCC	 	 	  27
+GCGGGCUCUCUGGUACGUCUC	 	 	  25
+UGGUACGUCUCCAGCGGAGAC	 	 	  24
+GUCUCCAGCGGAGACCUUUUC	 	 	  21
+ACAGAGGUUUGAAAAAAAGUC	 	 	  13
+UUGAAAAAAAGUCCACUCUUC	 	 	  11
+AAAAAAAGUCCACUCUUCCAC	 	 	  12
+UUCCACCGGUUGGCUCGAAGC	 	 	  24
+AAUCCUCGAACUCGGGUCUGC	 	 	  22
+CUCGGGUCUGCCGGGAUCGUC	 	 	  28
+UCGGGUCUGCCGGGAUCGUCC	 	 	  27
+GCGGGCUCUCUGGUACGUCUC	 	 	  25
+UGGUACGUCUCCAGCGGAGAC	 	 	  24
+GUCUCCAGCGGAGACCUUUUC	 	 	  21
+ACAGAGGUUUGAAAAAAAGUC	 	 	  13
+UUGAAAAAAAGUCCACUCUUC	 	 	  11
+AAAAAAAGUCCACUCUUCCAC	 	 	  12
+UUCCACCGGUUGGCUCGAAGC	 	 	  24
