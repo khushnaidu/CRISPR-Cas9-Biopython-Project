@@ -16,3 +16,4 @@ for seq in range(len(all_genomes_RGNA)):
         gRNA_score.append(CumulativeScore)
 
 print(gRNA_score)
+

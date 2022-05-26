@@ -12,6 +12,7 @@ with open('config.json', 'r') as json_file:
 
 # Opens the file that has the test cases in it.
 # Reads in each genome into its own list, per line
+#WORKING
 def read_in_data():
     genome_list = []
     with open(json_load['file_name']) as f:
@@ -46,6 +47,7 @@ def check_for_target_sites(all_genomes_gRNA):
 
 # Now go through each list genome 
 # and run algorthim to pick out sequnces of 20 nucleotides preceding a PAM.
+#WORKING
 def find_viable_gRNA(genome_list):
     all_genomes_gRNA = []
     for a_genome in genome_list:
@@ -54,12 +56,12 @@ def find_viable_gRNA(genome_list):
         counter2 = 1
         for i in a_genome:
             if(counter2 < len(a_genome) and a_genome[counter1] == "G" and a_genome[counter2] == "G" and counter1 >= 20):
-                all_GRNA_sequnces_current.append(a_genome[counter1-20:counter2])
+                all_GRNA_sequnces_current.append(a_genome[counter1-21:counter2-2])
             if(counter2 == len(a_genome)):
                 break
             counter1+=1
             counter2+=1
-        all_genomes_gRNA.append(all_GRNA_sequnces_current)    
+        all_genomes_gRNA.append(all_GRNA_sequnces_current) 
     return all_genomes_gRNA
 
 def convert_to_RNA(all_genomes_gRNA):
@@ -68,7 +70,7 @@ def convert_to_RNA(all_genomes_gRNA):
             new_string = ""
             for n in all_genomes_gRNA[seq][gRNA]:
                 if(n == "A"):
-                    new_string += ""
+                    new_string += "T"
                 if(n == "T"):
                     new_string += "A"
                 if(n == "G"):
@@ -97,40 +99,58 @@ def convert_to_complement_dna(all_genomes_gRNA):
         new_string = ""
     return all_genomes_gRNA
 
-def scoring_gRNA(all_genomes_gRNA):
+def scoring_gRNA(all_genomes_gRNA_copy):
     gRNA_score = [] #array to store score
-    for seq in range(len(all_genomes_gRNA)):
-        for gRNA in range(len(all_genomes_gRNA[seq])):
+    for seq in range(len(all_genomes_gRNA_copy)):
+        for gRNA in range(len(all_genomes_gRNA_copy[seq])):
             TCscore = 0
             GCscore = 0
             CumulativeScore = 0
+            ContiguosPenalty = 0
             index = 0
-            for n in all_genomes_gRNA[seq][gRNA]:
+            find_index = 0
+            for n in all_genomes_gRNA_copy[seq][gRNA]:
                 index = index + 1
                 if (index >= 15):
                     if (n == 'T' or n == 'C'):
                         TCscore+= 1  #Assigning score based on number of C's and T's adjacent to PAM
                 if (n == 'G' or n == 'C'):
                     GCscore+= 2  # Assigning a score for each G and C found (weighting)
-            CumulativeScore = GCscore - TCscore # Higher the score, the better the quality of gRNA
+            CumulativeScore = GCscore - TCscore
+            while find_index != -1:
+                counter = 0
+            #     if(all_genomes_gRNA_copy[seq][gRNA].find("AAAA") != -1):
+            #         counter +=1
+            #         find_index = all_genomes_gRNA_copy[seq][gRNA].find("AAAA")
+            #         ContiguosPenalty+=2
+            #         print("Found AAAA")
+            #         all_genomes_gRNA_copy[seq][gRNA] = all_genomes_gRNA_copy[seq][gRNA][:find_index] + all_genomes_gRNA_copy[seq][gRNA][find_index+4:]
+            #     if(all_genomes_gRNA_copy[seq][gRNA].find("CCCC") != -1):
+            #         counter +=1
+            #         find_index = all_genomes_gRNA_copy[seq][gRNA].find("CCCC")
+            #         ContiguosPenalty+=2
+            #         print("Found CCCC")
+            #         all_genomes_gRNA_copy[seq][gRNA] = all_genomes_gRNA_copy[seq][gRNA][:find_index] + all_genomes_gRNA_copy[seq][gRNA][find_index+4:]
+                if(all_genomes_gRNA_copy[seq][gRNA].find("GGGG") != -1):
+                    counter += 1
+                    find_index = all_genomes_gRNA_copy[seq][gRNA].find("GGGG")
+                    ContiguosPenalty+=2
+                    print("Found GGGG")
+                    all_genomes_gRNA_copy[seq][gRNA] = all_genomes_gRNA_copy[seq][gRNA][:find_index] + all_genomes_gRNA_copy[seq][gRNA][find_index+4:]
+            #     if(all_genomes_gRNA_copy[seq][gRNA].find("UUUU") != -1):
+            #         counter +=1
+            #         find_index = all_genomes_gRNA_copy[seq][gRNA].find("UUUU")
+            #         ContiguosPenalty+=2
+            #         print("Found UUUU")
+            #         all_genomes_gRNA_copy[seq][gRNA] = all_genomes_gRNA_copy[seq][gRNA][:find_index] + all_genomes_gRNA_copy[seq][gRNA][find_index+4:]
+                if(counter == 0):
+                    break
+             # Higher the score, the better the quality of gRNA
+            # while find_index != -1:
+            CumulativeScore = GCscore - TCscore + ContiguosPenalty
             gRNA_score.append(CumulativeScore)
     return gRNA_score
-                        
-# for seq in range(len(all_genomes_gRNA)):
-#     for gRNA in range(len(all_genomes_gRNA[seq])):
-#         if(all_genomes_gRNA[seq][gRNA].find("AAAA") != -1):
-#             print("Found AAAA")
-#             all_genomes_gRNA[seq][gRNA] = all_genomes_gRNA[seq][gRNA][find_index:find_index+4]
-#         if(all_genomes_gRNA[seq][gRNA].find("CCCC") != -1):
-#             print("Found CCCC")
-#             all_genomes_gRNA[seq][gRNA] = all_genomes_gRNA[seq][gRNA][find_index:find_index+4]
-#         if(all_genomes_gRNA[seq][gRNA].find("GGGG") != -1):
-#             print("Found GGGG")
-#             all_genomes_gRNA[seq][gRNA] = all_genomes_gRNA[seq][gRNA][find_index:find_index+4]
-#         if(all_genomes_gRNA[seq][gRNA].find("UUUU") != -1):
-#             print("Found UUUU")
-#             all_genomes_gRNA[seq][gRNA] = all_genomes_gRNA[seq][gRNA][find_index:find_index+4]
-
+        
 def write_to_output_file(all_genomes_gRNA,gRNA_score):
     f = open("output.txt", "w")
     f.write("The metrics list we used to make this score were: \n")
@@ -158,7 +178,9 @@ if __name__ == "__main__":
     if(text == "1"):
         ## This list contains a nested [[]]. Each inner list is all gRNA sequences per genome. 
         final_genome_list_gRNA = convert_to_RNA(potential_DNA_per_seq)
-        scores_gRNA = scoring_gRNA(final_genome_list_gRNA)
+        new_list = final_genome_list_gRNA.copy()
+        scores_gRNA = scoring_gRNA(new_list)
+        print(final_genome_list_gRNA)
         write_to_output_file(final_genome_list_gRNA,scores_gRNA)
     if(text == "2"):
         converted =convert_to_complement_dna(potential_DNA_per_seq)
@@ -166,4 +188,3 @@ if __name__ == "__main__":
         f = open("target_sequence_results.txt", "w")
         f.write("Total number of valid target sequences were found regarding " + json_load["diesease_name"] + ": " + str(x))
         
-
