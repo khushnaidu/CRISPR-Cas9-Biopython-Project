@@ -1,0 +1,1 @@
+Total number of valid target sequences were found regarding Cystic fibrosis (CF): 0

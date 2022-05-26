@@ -1,0 +1,5 @@
+{
+    "diesease_name": "Cystic fibrosis (CF)",
+    "target_sequence" : "CACCTGTGGTATCACTCCAA",
+    "file_name" : "gene.fna"
+}
