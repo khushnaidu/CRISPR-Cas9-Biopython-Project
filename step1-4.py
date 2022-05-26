@@ -1,3 +1,4 @@
+import copy
 from Bio import pairwise2
 from Bio.pairwise2 import format_alignment
 from Bio.SubsMat import MatrixInfo as matlist
@@ -119,30 +120,26 @@ def scoring_gRNA(all_genomes_gRNA_copy):
             CumulativeScore = GCscore - TCscore
             while find_index != -1:
                 counter = 0
-            #     if(all_genomes_gRNA_copy[seq][gRNA].find("AAAA") != -1):
-            #         counter +=1
-            #         find_index = all_genomes_gRNA_copy[seq][gRNA].find("AAAA")
-            #         ContiguosPenalty+=2
-            #         print("Found AAAA")
-            #         all_genomes_gRNA_copy[seq][gRNA] = all_genomes_gRNA_copy[seq][gRNA][:find_index] + all_genomes_gRNA_copy[seq][gRNA][find_index+4:]
-            #     if(all_genomes_gRNA_copy[seq][gRNA].find("CCCC") != -1):
-            #         counter +=1
-            #         find_index = all_genomes_gRNA_copy[seq][gRNA].find("CCCC")
-            #         ContiguosPenalty+=2
-            #         print("Found CCCC")
-            #         all_genomes_gRNA_copy[seq][gRNA] = all_genomes_gRNA_copy[seq][gRNA][:find_index] + all_genomes_gRNA_copy[seq][gRNA][find_index+4:]
+                if(all_genomes_gRNA_copy[seq][gRNA].find("AAAA") != -1):
+                    counter +=1
+                    find_index = all_genomes_gRNA_copy[seq][gRNA].find("AAAA")
+                    ContiguosPenalty+=2
+                    all_genomes_gRNA_copy[seq][gRNA] = all_genomes_gRNA_copy[seq][gRNA][:find_index] + all_genomes_gRNA_copy[seq][gRNA][find_index+4:]
+                if(all_genomes_gRNA_copy[seq][gRNA].find("CCCC") != -1):
+                    counter +=1
+                    find_index = all_genomes_gRNA_copy[seq][gRNA].find("CCCC")
+                    ContiguosPenalty+=2
+                    all_genomes_gRNA_copy[seq][gRNA] = all_genomes_gRNA_copy[seq][gRNA][:find_index] + all_genomes_gRNA_copy[seq][gRNA][find_index+4:]
                 if(all_genomes_gRNA_copy[seq][gRNA].find("GGGG") != -1):
                     counter += 1
                     find_index = all_genomes_gRNA_copy[seq][gRNA].find("GGGG")
-                    ContiguosPenalty+=2
-                    print("Found GGGG")
+                    ContiguosPenalty+=5
                     all_genomes_gRNA_copy[seq][gRNA] = all_genomes_gRNA_copy[seq][gRNA][:find_index] + all_genomes_gRNA_copy[seq][gRNA][find_index+4:]
-            #     if(all_genomes_gRNA_copy[seq][gRNA].find("UUUU") != -1):
-            #         counter +=1
-            #         find_index = all_genomes_gRNA_copy[seq][gRNA].find("UUUU")
-            #         ContiguosPenalty+=2
-            #         print("Found UUUU")
-            #         all_genomes_gRNA_copy[seq][gRNA] = all_genomes_gRNA_copy[seq][gRNA][:find_index] + all_genomes_gRNA_copy[seq][gRNA][find_index+4:]
+                if(all_genomes_gRNA_copy[seq][gRNA].find("UUUU") != -1):
+                    counter +=1
+                    find_index = all_genomes_gRNA_copy[seq][gRNA].find("UUUU")
+                    ContiguosPenalty+=2
+                    all_genomes_gRNA_copy[seq][gRNA] = all_genomes_gRNA_copy[seq][gRNA][:find_index] + all_genomes_gRNA_copy[seq][gRNA][find_index+4:]
                 if(counter == 0):
                     break
              # Higher the score, the better the quality of gRNA
@@ -178,9 +175,8 @@ if __name__ == "__main__":
     if(text == "1"):
         ## This list contains a nested [[]]. Each inner list is all gRNA sequences per genome. 
         final_genome_list_gRNA = convert_to_RNA(potential_DNA_per_seq)
-        new_list = final_genome_list_gRNA.copy()
+        new_list = copy.deepcopy(final_genome_list_gRNA)
         scores_gRNA = scoring_gRNA(new_list)
-        print(final_genome_list_gRNA)
         write_to_output_file(final_genome_list_gRNA,scores_gRNA)
     if(text == "2"):
         converted =convert_to_complement_dna(potential_DNA_per_seq)
